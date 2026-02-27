@@ -1,6 +1,5 @@
 use std::env;
-use std::fmt::format;
-use std::fs::{self, read};  
+use std::fs;
 use std::collections::HashMap;  
 
 const DEBUG_MODE_ON : bool = true;
@@ -24,6 +23,20 @@ fn main() -> std::io::Result<()>{
         .expect("Unable to read the file");
     println!("File Content : \n{contents}");
 
+
+    let mut counter : usize = 0;
+    // we are using usize because it can't be negative 
+    loop {
+        if counter > 10{
+            break;
+        }
+        //print!("{:?}|",contents.chars().nth(counter));
+        match contents.chars().nth(counter) {
+            Some(c) => println!("{}", c),
+            None => println!("Char not found at that index{}", counter)
+        }
+        counter+=1;
+    }
 
 
     // println!("Hello, world!");
