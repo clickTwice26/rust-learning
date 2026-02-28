@@ -27,9 +27,9 @@ fn find_header_files(code_str: String) -> Vec<String> {
     // return vec!["hello".to_string()];
     let mut index: u8 = 0;
     for i in code_str.chars() {
-        println!("{i}");
+        // println!("{i}");
         if i == '\n' {
-            println!("NewLine found");
+            dprint("NewLine found".to_string());
         }
         if i == '#' {
             dprint(format!("Preprocessor found at {index}"));
@@ -53,7 +53,7 @@ fn find_header_files(code_str: String) -> Vec<String> {
                 // };
                 
                 if temp_char == '>' {
-                    println!("Delimiter found for the preprocessor at {}", n);
+                    dprint(format!("Delimiter found for the preprocessor at {}", n));
                     
                     header_files.push(header_file_name.to_string());
                     break;
