@@ -19,14 +19,15 @@ fn dprint(message: String) -> bool {
 }
 fn find_header_files(code_str: String) -> Vec<String> {
     dprint(format!("from {{find_header_files}}"));
-    let header_files: Vec<&str> = vec![];
+    let mut header_files: Vec<String> = vec![];
     let mut preprocessor_found: bool = false;
     let code_str_length: usize = code_str.len();
     // println!("Code String Length : {}", code_str_length);
     dprint(format!("Code String Length : {}", code_str_length));
-    return vec!["hello".to_string()];
+    // return vec!["hello".to_string()];
     let mut index: u8 = 0;
     for i in code_str.chars() {
+        println!("{i}");
         if i == '\n' {
             println!("NewLine found");
         }
@@ -37,15 +38,25 @@ fn find_header_files(code_str: String) -> Vec<String> {
 
         if preprocessor_found == true && i == '<' {
             let mut n: usize = index as usize;
-
+            let mut header_file_name : String = String::new();
             while n < code_str_length {
-                let temp_char: char;
-                match code_str.chars().nth(n) {
-                    Some(c) => temp_char = c,
-                    None => println!("Index out of range"),
+                let Some(temp_char) = code_str.chars().nth(n) else{
+                    return vec![];
                 };
+                header_file_name = format!("{header_file_name}{temp_char}");
+
+                // match code_str.chars().nth(n) {
+                //     Some(c) => temp_char = c,
+                //     None => {
+                //         dprint(format!("None returned with the index {n}"));
+                //         return vec![]},
+                // };
+                
                 if temp_char == '>' {
                     println!("Delimiter found for the preprocessor at {}", n);
+                    
+                    header_files.push(header_file_name.to_string());
+                    break;
                 }
 
                 n += 1;
@@ -56,7 +67,7 @@ fn find_header_files(code_str: String) -> Vec<String> {
         index += 1;
     }
 
-    vec!["test".to_string()]
+    header_files
 }
 fn main() -> std::io::Result<()> {
     let file_path = env::current_dir()?;
@@ -69,7 +80,7 @@ fn main() -> std::io::Result<()> {
         "Content Length: {:?}",
         contents.chars().size_hint()
     ));
-    find_header_files(contents);
+    println!("{:?}",find_header_files(contents));
     let mut counter: usize = 0;
     // we are using usize because it can't be negative
     loop {
