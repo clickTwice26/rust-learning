@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include <string.h>
+#include <string.h> 
+
 int main(){
     int x = 10;
     float y = 2.3;

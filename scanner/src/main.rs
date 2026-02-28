@@ -1,13 +1,11 @@
 use std::collections::HashMap;
 use std::env;
 use std::fs;
-use std::task::Context;
 
 const DEBUG_MODE_ON: bool = true;
-
-const keywords: [&str; 2] = ["auto", "int"];
-const operators: [char; 4] = ['=', '+', '-', '*'];
-const delimiter: char = ';';
+const KEYWORDS: [&str; 3] = ["auto", "int", "float"];
+const OPERATORS: [char; 4] = ['=', '+', '-', '*'];
+const DELIMITER: char = ';';
 
 fn dprint(message: String) -> bool {
     if !DEBUG_MODE_ON {
@@ -29,7 +27,7 @@ fn find_header_files(code_str: String) -> Vec<String> {
     for i in code_str.chars() {
         // println!("{i}");
         if i == '\n' {
-            dprint("NewLine found".to_string());
+            dprint("Newline found".to_string());
         }
         if i == '#' {
             dprint(format!("Preprocessor found at {index}"));
@@ -69,11 +67,25 @@ fn find_header_files(code_str: String) -> Vec<String> {
 
     header_files
 }
+
+fn find_defined_syntax(code_str: String) -> Vec<String>{
+    let words: Vec<&str>  = code_str.split_whitespace().collect();
+
+    for i in words{
+        if KEYWORDS.contains(&i){
+            println!("{i} is a keyword");
+        }
+    }
+        
+    
+    vec![]
+}
 fn main() -> std::io::Result<()> {
     let file_path = env::current_dir()?;
     let file_path_str: String = format!("{}/sample.c", file_path.display());
     // println!("In file {}", file_path.display());
     let contents: String = fs::read_to_string(file_path_str).expect("Unable to read the file");
+    let mut contents_2 = contents.clone();
     println!("File Content : \n{contents}");
     // println!("{:?}", contents.chars().nth(1));
     dprint(format!(
@@ -81,6 +93,7 @@ fn main() -> std::io::Result<()> {
         contents.chars().size_hint()
     ));
     println!("{:?}",find_header_files(contents));
+    find_defined_syntax(contents_2);
     let mut counter: usize = 0;
     // we are using usize because it can't be negative
     loop {
